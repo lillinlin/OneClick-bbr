@@ -2,6 +2,22 @@
 
 clear
 
+# --- 前置环境检查 ---
+
+# 1. 检查是否为 Debian/Ubuntu 系统
+if ! command -v apt-get &>/dev/null; then
+    echo -e "\033[31m错误：此脚本仅适用于 Debian/Ubuntu 系统。\033[0m"
+    exit 1
+fi
+
+# 2. 检查内核是否支持 BBR
+if ! sysctl net.ipv4.tcp_available_congestion_control | grep -q bbr; then
+    echo -e "\033[31m错误：你的内核不支持 BBR。请先更换支持 BBR 的内核。\033[0m"
+    exit 1
+fi
+
+# --- 主菜单和功能 ---
+
 echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
 echo "BBR + FQ 一键开启脚本"
 echo "作者：github/lillinlin"
