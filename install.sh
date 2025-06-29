@@ -2,6 +2,13 @@
 
 clear
 
+# --- 检查是否为 root 用户 ---
+
+if [ "$(id -u)" -ne 0 ]; then
+    echo -e "\033[31m错误：请使用 root 用户身份运行此脚本。\033[0m"
+    exit 1
+fi
+
 # --- 前置环境检查 ---
 
 # 1. 检查是否为 Debian/Ubuntu 系统
