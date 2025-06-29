@@ -10,7 +10,16 @@ if ! command -v apt-get &>/dev/null; then
     exit 1
 fi
 
-# 2. 检查内核是否支持 BBR
+# 2. 手动加载 BBR 模块
+echo "正在加载 BBR 模块..."
+sudo modprobe tcp_bbr
+if ! lsmod | grep -q bbr; then
+    echo -e "\033[31m错误：无法加载 BBR 模块。\033[0m"
+    exit 1
+fi
+echo "BBR 模块加载成功！"
+
+# 3. 检查内核是否支持 BBR
 if ! sysctl net.ipv4.tcp_available_congestion_control | grep -q bbr; then
     echo -e "\033[31m错误：你的内核不支持 BBR。请先更换支持 BBR 的内核。\033[0m"
     exit 1
