@@ -1,83 +1,32 @@
 #!/bin/bash
+# ==============================================
+# 功能    : 自动配置 Linux 系统 BBR 及网络优化参数
+# 作者    : github/lillinlin
+# 适用    : Debian/Ubuntu/CentOS 等 Linux 系统
+# ==============================================
 
-clear
+CONF_FILE="/etc/sysctl.d/99-bbr.conf"
 
-# --- 检查是否为 root 用户 ---
+echo "正在写入 BBR 优化参数到 $CONF_FILE ..."
 
-if [ "$(id -u)" -ne 0 ]; then
-    echo -e "\033[31m错误：请使用 root 用户身份运行此脚本。\033[0m"
-    exit 1
-fi
+sudo tee $CONF_FILE > /dev/null <<EOF
+net.core.default_qdisc = cake
+net.ipv4.tcp_congestion_control = bbr
+net.ipv4.tcp_slow_start_after_idle = 0
+net.ipv4.tcp_delack_min = 1
+net.ipv4.tcp_timestamps = 1
+net.ipv4.tcp_sack = 1
+net.ipv4.tcp_window_scaling = 1
+net.ipv4.tcp_moderate_rcvbuf = 1
+net.ipv4.tcp_adv_win_scale = 2
+net.ipv4.tcp_frto = 2
+net.core.busy_poll = 50
+net.core.busy_read = 50
+net.ipv4.tcp_max_syn_backlog = 65535
+EOF
 
-# --- 前置环境检查 ---
+echo "参数写入完成，正在应用配置 ..."
 
-# 1. 检查是否为 Debian/Ubuntu 系统
-if ! command -v apt-get &>/dev/null; then
-    echo -e "\033[31m错误：此脚本仅适用于 Debian/Ubuntu 系统。\033[0m"
-    exit 1
-fi
+sudo sysctl --system
 
-# 2. 手动加载 BBR 模块
-sudo modprobe tcp_bbr
-if ! lsmod | grep -q bbr; then
-    echo -e "\033[31m错误：无法加载 BBR 模块。\033[0m"
-    exit 1
-fi
-
-# 3. 检查内核是否支持 BBR
-if ! sysctl net.ipv4.tcp_available_congestion_control | grep -q bbr; then
-    echo -e "\033[31m错误：你的内核不支持 BBR。请先更换支持 BBR 的内核。\033[0m"
-    exit 1
-fi
-
-# --- 主菜单和功能 ---
-
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "BBR + FQ 一键开启脚本"
-echo "作者：github/lillinlin"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-echo "请选择操作（输入数字）："
-echo "  1. 启用 BBR + FQ"
-echo "  2. 查看当前内核参数"
-echo "  3. 退出"
-echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
-read -rp "你的选择是: " choice
-
-case "$choice" in
-1)
-    echo ""
-    echo "正在应用 BBR + FQ 配置..."
-
-    # 删除旧的配置，避免重复
-    sudo sed -i '/^net.core.default_qdisc/d' /etc/sysctl.conf
-    sudo sed -i '/^net.ipv4.tcp_congestion_control/d' /etc/sysctl.conf
-
-    # 写入新的配置
-    echo 'net.core.default_qdisc=fq' | sudo tee -a /etc/sysctl.conf >/dev/null
-    echo 'net.ipv4.tcp_congestion_control=bbr' | sudo tee -a /etc/sysctl.conf >/dev/null
-
-    # 立刻让内核参数生效
-    sudo sysctl -p
-    
-    echo ""
-    echo "BBR + FQ 已成功启用！"
-    echo "新的参数已写入 /etc/sysctl.conf 文件中。"
-    ;;
-2)
-    echo ""
-    echo "正在查询当前的 TCP 拥塞控制算法和默认队列算法..."
-    echo "--------------------------------------------------"
-    sysctl net.ipv4.tcp_congestion_control
-    sysctl net.core.default_qdisc
-    echo "--------------------------------------------------"
-    ;;
-3)
-    echo ""
-    echo "退出脚本。"
-    exit 0
-    ;;
-*)
-    echo ""
-    echo "无效的输入，请输入 1, 2 或 3。"
-    ;;
-esac
+echo "BBR 优化已启用并生效。"
