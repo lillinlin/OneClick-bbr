@@ -11,10 +11,10 @@
 # -------------------------------
 echo "检查并安装/更新 sudo ..."
 if command -v apt >/dev/null 2>&1; then
-    sudo apt update -y
-    sudo apt install sudo -y
+    apt update -y
+    apt install sudo -y
 elif command -v yum >/dev/null 2>&1; then
-    sudo yum install sudo -y
+    yum install sudo -y
 else
     echo "未知包管理器，请手动安装 sudo"
 fi
