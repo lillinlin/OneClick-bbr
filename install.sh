@@ -34,6 +34,8 @@ net.ipv4.tcp_moderate_rcvbuf = 1
 net.ipv4.tcp_adv_win_scale = 2
 net.core.busy_poll = 10000
 net.core.busy_read = 10000
+net.core.netdev_budget = 1000
+net.core.netdev_budget_usecs = 0
 net.ipv4.tcp_max_syn_backlog = 65535
 EOF
 
