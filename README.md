@@ -1,4 +1,4 @@
-一键开启BBR+Cake
+一键开启BBR+fq
 
 并且采用写入/etc/sysctl.d/99-bbr.conf 的方式
 
