@@ -3,7 +3,7 @@
 # 脚本名称: enable-bbr.sh
 # 功能    : 安装/更新 sudo 并自动配置 Linux BBR
 # 作者    : github/lillinlin
-# 适用    : Debian/Ubuntu/CentOS 等 Linux 系统
+# 适用    : Debian 
 # ==============================================
 
 # -------------------------------
