@@ -25,7 +25,7 @@ fi
 CONF_FILE="/etc/sysctl.d/99-bbr.conf"
 echo "正在写入 BBR 优化参数到 $CONF_FILE ..."
 sudo tee $CONF_FILE > /dev/null <<EOF
-net.core.default_qdisc = cake
+net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
 net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_sack = 1
