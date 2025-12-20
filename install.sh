@@ -27,6 +27,7 @@ echo "正在写入 BBR 优化参数到 $CONF_FILE ..."
 sudo tee $CONF_FILE > /dev/null <<EOF
 net.core.default_qdisc = fq
 net.ipv4.tcp_congestion_control = bbr
+net.ipv4.tcp_slow_start_after_idle = 0
 net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_sack = 1
 net.ipv4.tcp_window_scaling = 1
