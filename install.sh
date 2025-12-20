@@ -31,7 +31,7 @@ net.ipv4.tcp_timestamps = 1
 net.ipv4.tcp_sack = 1
 net.ipv4.tcp_window_scaling = 1
 net.ipv4.tcp_moderate_rcvbuf = 1
-net.ipv4.tcp_adv_win_scale = 2
+net.ipv4.tcp_adv_win_scale = 1
 net.core.busy_poll = 50
 net.core.busy_read = 50
 EOF
