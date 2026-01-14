@@ -36,6 +36,9 @@ net.ipv4.tcp_moderate_rcvbuf = 1
 net.ipv4.tcp_mtu_probing = 1
 net.core.busy_poll = 50
 net.core.busy_read = 50
+net.core.netdev_max_backlog = 262144
+net.core.netdev_budget = 2000
+net.core.netdev_budget_usecs = 6000
 EOF
 
 # -------------------------------
