@@ -33,8 +33,8 @@ net.ipv4.tcp_sack = 1
 net.ipv4.tcp_window_scaling = 1
 net.ipv4.tcp_moderate_rcvbuf = 1
 net.ipv4.tcp_mtu_probing = 1
-net.core.busy_poll = 100
-net.core.busy_read = 100
+net.core.busy_poll = 10
+net.core.busy_read = 10
 EOF
 
 # -------------------------------
